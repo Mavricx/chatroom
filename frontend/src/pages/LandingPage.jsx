@@ -161,7 +161,7 @@ const LandingPage = () => {
         {/* Header/Logo Area */}
         <div className="w-full max-w-6xl flex justify-center md:justify-start pt-4">
           <div className="bg-blue-500 text-white px-6 py-2 rounded-full font-bold text-lg md:text-xl shadow-lg">
-            ChatRoom
+            PingPal
           </div>
         </div>
 
@@ -194,7 +194,7 @@ const LandingPage = () => {
 
         {/* Bottom CTA */}
         <div className="w-full max-w-md pb-8">
-          <button className="w-full bg-orange-300 hover:bg-blue-600 text-white font-semibold py-4 md:py-5 px-8 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-blue-500/50 flex items-center justify-center gap-3 md:gap-4 text-base md:text-lg group" onClick={handleGoogleLogin}>
+          <button className="w-full bg-black hover:bg-blue-600 text-white font-semibold py-4 md:py-5 px-8 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-blue-500/50 flex items-center justify-center gap-3 md:gap-4 text-base md:text-lg group" onClick={handleGoogleLogin}>
             <svg className="w-6 h-6 md:w-7 md:h-7" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
