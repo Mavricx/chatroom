@@ -5,8 +5,12 @@ const mongoose=require('mongoose');
 const session=require('express-session');
 const GoogleStrategy=require('passport-google-oauth20').Strategy;
 const app=express();
+const authRoute=require('./routes/auth.js')
 
-app.use(session({secret:"process.env.CLIENT_SECRET",resave:false,saveUninitialized:true}));
+const User=require('./models/user.js');
+const connectDB=require("./utils/db.js");
+
+app.use(session({secret:process.env.SESSION_SECRET,resave:false,saveUninitialized:true}));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -18,23 +22,40 @@ passport.use(new GoogleStrategy({
     clientID:process.env.CLIENT_ID,
     clientSecret:process.env.CLIENT_SECRET,
     callbackURL:process.env.GOOGLE_REDIRECT_URL
-},(accessToken,refreshToken,profile,done)=>{
-    return done(null,profile);
+},async (accessToken,refreshToken,profile,done)=>{
+   try{
+    let user=await User.findOne({googleId:profile.id});
+    if(!user){
+        user=await User.create({
+            googleId:profile.id,
+            email:profile.emails[0].value,
+            name:profile.displayName,
+            givenName:profile.name.givenName,
+            familyName:profile.name.familyName,
+            profilePic:profile.photos[0].value
+        });
+    }
+    return done(null,user);
+   }
+   catch(err){
+    console.error(err,null);
+    return done(err,null);
+   }
 }))
+
+
 
 app.get("/",(req,res)=>{
     res.send("Hello world");
 })
 
-app.get("/auth/google", passport.authenticate("google",{scope:["profile","email"]}));
-app.get("/auth/google/callback",
-    passport.authenticate("google",{failureRedirect:"http://localhost:5173/home"}),
-    (req,res)=>{
-        console.log(req.user);
-        res.send("Logged in with google: "+JSON.stringify(req.user));
-    }
-);
+app.use("/auth",authRoute);
 
-app.listen(5000,()=>{
-    console.log("Server started on http://localhost:5000");
+
+
+connectDB().then(()=>{
+    const port=process.env.PORT || 5000;
+    app.listen(port,()=>{
+    console.log(`Server started on http://localhost:${port}`);
+})
 })
