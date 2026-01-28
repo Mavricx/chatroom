@@ -1,7 +1,6 @@
 require('dotenv').config();
 const passport=require('passport');
 const express=require('express');
-const mongoose=require('mongoose');
 const session=require('express-session');
 const GoogleStrategy=require('passport-google-oauth20').Strategy;
 const app=express();
@@ -9,6 +8,11 @@ const authRoute=require('./routes/auth.js')
 
 const User=require('./models/user.js');
 const connectDB=require("./utils/db.js");
+
+const http=require('http');
+const {Server} = require('socket.io');
+const server=http.createServer(app);
+const io=new Server(server);
 
 app.use(session({secret:process.env.SESSION_SECRET,resave:false,saveUninitialized:true}));
 
@@ -50,6 +54,10 @@ app.get("/",(req,res)=>{
 })
 
 app.use("/auth",authRoute);
+
+io.on("connection",(socket)=>{
+    console.log("User connected:",socket.id);
+})
 
 
 
